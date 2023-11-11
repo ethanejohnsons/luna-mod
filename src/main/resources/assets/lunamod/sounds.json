@@ -1,0 +1,17 @@
+{
+	"woof": {
+		"sounds": [
+			"lunamod:woof"
+		]
+	},
+	"hurt": {
+		"sounds": [
+			"lunamod:hurt"
+		]
+	},
+	"death": {
+		"sounds": [
+			"lunamod:death"
+		]
+	}
+}

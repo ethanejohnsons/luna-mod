@@ -1,0 +1,17 @@
+{
+	"schemaVersion": 1,
+	"id": "lunamod",
+	"version": "${version}",
+	"name": "Luna Mod",
+	"license": "All-Rights-Reserved",
+	"environment": "*",
+	"entrypoints": {
+		"main": [ "dev.bluevista.lunamod.LunaMod" ],
+		"client": [ "dev.bluevista.lunamod.LunaMod" ]
+	},
+	"depends": {
+		"minecraft": "*",
+		"fabricloader": "*",
+		"fabric": "*"
+	}
+}
