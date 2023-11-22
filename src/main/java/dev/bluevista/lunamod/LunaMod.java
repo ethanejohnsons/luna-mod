@@ -1,5 +1,6 @@
 package dev.bluevista.lunamod;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import dev.bluevista.lunamod.client.LunaEntityRenderer;
 import dev.bluevista.lunamod.entity.LunaEntity;
 import net.fabricmc.api.ClientModInitializer;
@@ -7,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -24,6 +26,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import static net.minecraft.server.command.CommandManager.*;
 
 public class LunaMod implements ModInitializer, ClientModInitializer {
 
@@ -56,6 +60,28 @@ public class LunaMod implements ModInitializer, ClientModInitializer {
 	public void onInitialize() {
 		LOGGER.info("woof.");
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(this::onModifyGroupEntries);
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			dispatcher.register(literal("lunasplosion")
+				.then(argument("amount", IntegerArgumentType.integer(1))
+				.executes(ctx -> {
+					int amount = IntegerArgumentType.getInteger(ctx, "amount");
+					var pos = ctx.getSource().getPosition();
+					var world = ctx.getSource().getWorld();
+					for (int i = 0; i < amount; i++) {
+						var luna = LUNA.create(world);
+
+						// minimal amount of spacing
+						luna.updatePosition(
+							pos.x + (world.random.nextDouble() - 0.5) * amount * 0.02,
+							pos.y,
+							pos.z + (world.random.nextDouble() - 0.5) * amount * 0.02
+						);
+						world.spawnEntity(luna);
+					}
+					return 1;
+				}))
+			);
+		});
 	}
 
 	private void onModifyGroupEntries(FabricItemGroupEntries entries) {
