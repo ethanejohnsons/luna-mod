@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemSteerable;
 import net.minecraft.entity.Saddleable;
+import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
@@ -53,6 +54,7 @@ public class LunaEntity extends PathAwareEntity implements GeoEntity, ItemSteera
 	@Override
 	protected void initGoals() {
 		this.goalSelector.add(0, new SwimGoal(this));
+		this.goalSelector.add(1, new EscapeDangerGoal(this, 1.5));
 		this.goalSelector.add(1, new TemptGoal(this, 1.2, ALL_FOOD, false));
 		this.goalSelector.add(2, new WanderAroundFarGoal(this, 1.0));
 		this.goalSelector.add(3, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
